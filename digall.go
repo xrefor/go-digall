@@ -6,8 +6,8 @@ import (
         "net"
         "github.com/fatih/color"
         "github.com/likexian/whois-go"
-         "regexp"
-         "strings"
+        "regexp"
+        "strings"
 )
 
  func whoisQuery(query string) {
