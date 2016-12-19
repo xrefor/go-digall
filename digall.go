@@ -5,7 +5,34 @@ import (
         "os"
         "net"
                 "github.com/fatih/color"
+                "github.com/likexian/whois-go"
+                "regexp"
+                "strings"
 )
+
+ func whoisQuery(query string) {
+        result, err := whois.Whois(query)
+        if err != nil {
+                fmt.Println(err)
+        }
+
+        re := regexp.MustCompile("[0-9]{9}")
+        np := regexp.MustCompile("N.PRI.[0-9]{8}")
+        orggrep := re.FindAllString(result, -1)
+        nprigrep := np.FindAllString(result, -1)
+        orgnr := strings.Trim(fmt.Sprint(orggrep), "[]")
+        npri := strings.Trim(fmt.Sprint(nprigrep), "[]")
+
+        if len(npri) > 0 {
+            fmt.Println("[+] ID: ", npri)
+        } else if len(orgnr) > 0 {
+            fmt.Println("[+] Org.nr:",orgnr)
+        } else {
+            color.Red("[-] ERROR. Check if org is deleted.")
+        }
+        return
+ }
+
 
 //Lookup functions
 func aRecord(query string) {
@@ -22,7 +49,7 @@ func aRecord(query string) {
 
 func cnameRecord(query string) {
         cnameRecord, err := net.LookupCNAME(query)
-        color.Cyan("\n[+] CNAME Records\n")
+        color.Cyan("\n[+] CNAME Record("+query+")")
         fmt.Println(cnameRecord, err)
         if err != nil {
                 //panic(err)
@@ -79,7 +106,7 @@ func srvRecord(query string) {
 
 func nsRecord(query string) {
         nsRecord, err := net.LookupNS(query)
-        color.Cyan("\n[+] NS Records\n")
+        color.Cyan("[+] NS Records\n")
         for i := 0; i < len(nsRecord); i++ {
                 fmt.Printf("NS : %s \n", nsRecord[i].Host)
         }
@@ -96,8 +123,13 @@ func main() {
                 query := os.Args[1]
                 // variable for A record subdomain
                 www := fmt.Sprintf("www.")
+                //Run whois query
+                color.Green("[ DIGALL ]")
+                color.Yellow("\n[+] Checking whois information")
+                color.Yellow("[!] Currently only works for .no domains\n")
+                whoisQuery(query)
                 //Run query functions with info
-                color.Yellow("\n[ digall: Starting DNS queries ]\n")
+                color.Yellow("\n[+] Starting DNS queries\n")
                 aRecord(query)
                 color.Magenta("\n[!] with www. :")
                 aRecord(www+query)
@@ -107,10 +139,10 @@ func main() {
                 srvRecord(query)
                 fmt.Printf("\n")
                 nsRecord(query)
-                color.Green("\n[!] Done\n")
+                color.Green("\n[+] Done\n")
 
                 } else {
-                color.Red("ERROR: Not a valid argument\n")
-                color.Yellow("Usage: ./digall <domain>\n[!] QUITTING")
+                color.Red("[-] ERROR: Not a valid argument\n")
+                color.Yellow("[!] Usage: ./digall <domain>\n[!] QUITTING")
         }
 }
