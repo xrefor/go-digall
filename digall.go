@@ -101,7 +101,7 @@ func nsRecord(query string) {
 }
 
 func main() {
-	//Query argument (./digall <arg>)
+	//Query argument (digall <arg>)
 	if len(os.Args) > 1 {
 		// input argument
 		query := os.Args[1]
