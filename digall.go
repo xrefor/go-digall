@@ -11,28 +11,6 @@ import (
 	"github.com/likexian/whois-go"
 )
 
-func whoisQuery(query string) {
-	result, err := whois.Whois(query)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	re := regexp.MustCompile("[0-9]{9}")
-	np := regexp.MustCompile("N.PRI.[0-9]{8}")
-	orggrep := re.FindAllString(result, -1)
-	nprigrep := np.FindAllString(result, -1)
-	orgnr := strings.Trim(fmt.Sprint(orggrep), "[]")
-	npri := strings.Trim(fmt.Sprint(nprigrep), "[]")
-
-	if len(npri) > 0 {
-		fmt.Println("[+] ID:", npri)
-	} else if len(orgnr) > 0 {
-		fmt.Println("[+] Org.nr:", orgnr)
-	} else {
-		color.Red("[-] ERROR. Check if org is deleted.")
-	}
-}
-
 //Lookup functions
 func aRecord(query string) {
 	ipRecord, err := net.LookupIP(query)
@@ -110,11 +88,7 @@ func main() {
 		www := "www."
 		//Used to check protocoll of SRV Record (See below)
 		proto := [3]string{"tcp", "tls", "udp"}
-		//Run whois query with info
-		color.Green("[ DIGALL ]")
-		color.Yellow("\n[+] Checking whois information")
-		color.Yellow("[!] Currently only works for .no domains\n")
-		whoisQuery(query)
+		
 		//Run query functions and print info
 		//----------------------------------
 		//A Records
