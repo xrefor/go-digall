@@ -4,10 +4,11 @@ import (
         "fmt"
         "os"
         "net"
-                "github.com/fatih/color"
-                "github.com/likexian/whois-go"
-                "regexp"
-                "strings"
+        "regexp"
+        "strings"
+
+        "github.com/fatih/color"
+        "github.com/likexian/whois-go"
 )
 
  func whoisQuery(query string) {
