@@ -108,7 +108,7 @@ func main() {
 		// variable for A record subdomain
 		www := "www."
 		//Used to check protocoll of SRV Record (See below)
-		proto := [2]string{"tcp", "tls"}
+		proto := [3]string{"tcp", "tls", "udp"}
 		//Run whois query with info
 		color.Green("[ DIGALL ]")
 		color.Yellow("\n[+] Checking whois information")
@@ -135,6 +135,7 @@ func main() {
 		color.Cyan("\n[+] SRV Record(s)\n")
 		srvRecord(query, proto[0])
 		srvRecord(query, proto[1])
+		srvRecord(query, proto[2])
 		fmt.Printf("\n")
 		//NS Records
 		nsRecord(query)
