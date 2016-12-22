@@ -73,7 +73,8 @@ func txtRecord(query string) {
 }
 
 func srvRecord(query, proto string) {
-	services := [...]string{"sipfederationtls", "autodiscover", "sip", "tls", "tcp", "xmpp-server", "VLMCS", "pbx","h323ls"}
+	services := [...]string{"sipfederationtls", "autodiscover", "sip", "tls", "tcp", "xmpp-server", "VLMCS", "pbx","h323ls"
+			       "ts3","stun"}
 	for _, service := range services {
 		cname, addrs, err := net.LookupSRV(service, proto, query)
 		for i := 0; i < len(addrs); i++ {
