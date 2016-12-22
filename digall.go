@@ -4,10 +4,10 @@ import (
         "fmt"
         "os"
         "net"
-        "github.com/fatih/color"
-        "github.com/likexian/whois-go"
-        "regexp"
-        "strings"
+                "github.com/fatih/color"
+                "github.com/likexian/whois-go"
+                "regexp"
+                "strings"
 )
 
  func whoisQuery(query string) {
@@ -24,13 +24,12 @@ import (
         npri := strings.Trim(fmt.Sprint(nprigrep), "[]")
 
         if len(npri) > 0 {
-            fmt.Println("[+] ID: ", npri)
+            fmt.Println("[+] ID:",npri)
         } else if len(orgnr) > 0 {
             fmt.Println("[+] Org.nr:",orgnr)
         } else {
             color.Red("[-] ERROR. Check if org is deleted.")
         }
-        return
  }
 
 
@@ -44,7 +43,6 @@ func aRecord(query string) {
         if err != nil {
                 //panic(err)
         }
-        return
 }
 
 func cnameRecord(query string) {
@@ -54,7 +52,6 @@ func cnameRecord(query string) {
         if err != nil {
                 //panic(err)
         }
-        return
 }
 
 func mxRecord(query string) {
@@ -67,7 +64,6 @@ func mxRecord(query string) {
         if err != nil {
                 //panic(err)
         }
-        return
 }
 
 func txtRecord(query string) {
@@ -79,14 +75,13 @@ func txtRecord(query string) {
         if err != nil {
                 //panic(err)
         }
-        return
 }
 
-func srvRecord(query string) {
-        color.Cyan("\n[+] SRV Record(s)\n")
-        services := [...]string{"sipfederationtls", "autodiscover", "tls", "_sip", "xmpp-server", "VLMCS"}
+func srvRecord(query, proto string) {
+        //color.Cyan("\n[+] SRV Record(s)\n")
+        services := [...]string{"sipfederationtls", "autodiscover", "sip", "tls","tcp", "xmpp-server", "VLMCS"}
         for _, service := range services {
-                cname, addrs, err := net.LookupSRV(service, "tcp", query)
+                cname, addrs, err := net.LookupSRV(service, proto, query)
                 for i := 0; i < len(addrs); i++ {
                         fmt.Printf("addrs[%d].Target : %s \n", i, addrs[i].Target)
                         fmt.Printf("addrs[%d].Port : %d \n", i, addrs[i].Port)
@@ -101,7 +96,6 @@ func srvRecord(query string) {
                 //fmt.Printf("Target: %s:%d\n",cname, record.Target, record.Port,)
                 //}
         }
-        return
 }
 
 func nsRecord(query string) {
@@ -113,16 +107,16 @@ func nsRecord(query string) {
         if err != nil {
                 //panic(err)
         }
-        return
 }
 
 func main() {
-        //Query argument (./digall <arg>)
+        //Query argument (digall <arg>)
         if len(os.Args) > 1 {
                 // input argument
                 query := os.Args[1]
-                // variable for A record subdomain
+                // variables for alternative records
                 www := fmt.Sprintf("www.")
+                proto := [2]string{"tcp","tls"}
                 //Run whois query
                 color.Green("[ DIGALL ]")
                 color.Yellow("\n[+] Checking whois information")
@@ -136,7 +130,9 @@ func main() {
                 cnameRecord(www+query)
                 mxRecord(query)
                 txtRecord(query)
-                srvRecord(query)
+                color.Cyan("\n[+] SRV Record(s)\n")
+                srvRecord(query, proto[0])
+                srvRecord(query, proto[1])
                 fmt.Printf("\n")
                 nsRecord(query)
                 color.Green("\n[+] Done\n")
