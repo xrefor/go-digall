@@ -91,11 +91,12 @@ func main() {
 		//A Records
 		color.Yellow("\n[+] Starting DNS queries\n")
 		color.Cyan("[+] A Records\n")
+		color.Magenta("[*] "+query)
 		aRecord(query)
-		color.Magenta("\n[!] with www. :")
+		color.Magenta("\n[*] www."+query)
 		aRecord(www + query)
 		//CNAME Records
-		color.Cyan("\n[+] CNAME Record(" + query + ")")
+		color.Cyan("\n[+] CNAME Record(www." + query + ")")
 		cnameRecord(www + query)
 		//MX Records
 		color.Cyan("\n[+] MX Records\n")
