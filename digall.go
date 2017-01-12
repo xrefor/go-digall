@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"net"
-	"os"
-
 	"github.com/fatih/color"
+	"golang.org/x/net/idna"
+	"net"
+	"net/url"
+	"os"
 )
 
 //Lookup functions
@@ -21,7 +22,7 @@ func aRecord(query string) {
 
 func cnameRecord(query string) {
 	cnameRecord, err := net.LookupCNAME(query)
-	fmt.Println(cnameRecord, err)
+	fmt.Println(cnameRecord)
 	if err != nil {
 		//panic(err)
 	}
@@ -48,8 +49,8 @@ func txtRecord(query string) {
 }
 
 func srvRecord(query, proto string) {
-	services := [...]string{"sipfederationtls", "autodiscover", "sip", "tls", "tcp", "xmpp-server", "VLMCS", "pbx","h323ls",
-			       "ts3","stun"}
+	services := [...]string{"sipfederationtls", "autodiscover", "sip", "tls", "tcp", "xmpp-server", "VLMCS", "pbx", "h323ls",
+		"ts3", "stun"}
 	for _, service := range services {
 		cname, addrs, err := net.LookupSRV(service, proto, query)
 		for i := 0; i < len(addrs); i++ {
@@ -77,29 +78,36 @@ func nsRecord(query string) {
 }
 
 func main() {
-	//Query argument (digall <arg>)
 	if len(os.Args) > 1 {
-		// input argument
-		query := os.Args[1]
+		//Query argument parsed and encoded to ASCII
+		//in case of foreign letters(e.g æøå) usage: (digall <hostname>)
+		u, err := url.Parse("http://" + os.Args[1])
+		if err != nil {
+			fmt.Println(err)
+		}
+		query, err := idna.ToASCII(u.Host)
+		if err != nil {
+			fmt.Println(err)
+		}
 		// variable for A record subdomain
 		www := "www."
 		//Used to check protocoll of SRV Record (See below)
 		proto := [3]string{"tcp", "tls", "udp"}
-		
+
 		//Run query functions and print info
 		//----------------------------------
 		//A Records
 		color.Yellow("\n[+] Starting DNS queries\n")
 		color.Cyan("[+] A Records\n")
-		color.Magenta("[*] "+query)
+		color.Magenta("[*] " + query)
 		aRecord(query)
-		color.Magenta("\n[*] www."+query)
+		color.Magenta("\n[*] www." + query)
 		aRecord(www + query)
 		//CNAME Records
 		color.Cyan("\n[+] CNAME Record(www." + query + ")")
 		cnameRecord(www + query)
 		//MX Records
-		color.Cyan("\n[+] MX Records\n")
+		color.Cyan("[+] MX Records\n")
 		mxRecord(query)
 		//TXT Records
 		color.Cyan("\n[+] TXT Record(s)\n")
