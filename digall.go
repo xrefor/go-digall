@@ -97,30 +97,30 @@ func main() {
 		//Run query functions and print info
 		//----------------------------------
 		//A Records
-		color.Yellow("\n[+] Starting DNS queries\n")
-		color.Cyan("[+] A Records\n")
-		color.Magenta("[*] " + query)
-		aRecord(query)
-		color.Magenta("\n[*] www." + query)
-		aRecord(www + query)
-		//CNAME Records
-		color.Cyan("\n[+] CNAME Record(www." + query + ")")
-		cnameRecord(www + query)
-		//MX Records
-		color.Cyan("[+] MX Records\n")
-		mxRecord(query)
-		//TXT Records
-		color.Cyan("\n[+] TXT Record(s)\n")
-		txtRecord(query)
-		//SRV Records using slice proto to check protocoll tcp and tls
-		color.Cyan("\n[+] SRV Record(s)\n")
-		srvRecord(query, proto[0])
-		srvRecord(query, proto[1])
-		srvRecord(query, proto[2])
-		fmt.Printf("\n")
-		//NS Records
-		nsRecord(query)
-		color.Green("\n[+] Done\n")
+        	color.Yellow("\n[+] Starting DNS queries\n")
+        	color.Cyan("[+] A Records\n")
+        	color.Magenta("[*] "+query)
+        	aRecord(query)
+        	color.Magenta("\n[*] www."+query)
+        	aRecord(www+query)
+        	//CNAME Records
+        	color.Cyan("\n[+] CNAME Record(www."+query+")")
+        	cnameRecord(www+query)
+        	//MX Records
+        	color.Cyan("[+] MX Records\n")
+        	mxRecord(query)
+        	//TXT Records
+        	color.Cyan("\n[+] TXT Record(s)\n")
+        	txtRecord(query)
+        	//SRV Records using slice proto to check protocoll tcp and tls
+        	color.Cyan("\n[+] SRV Record(s)\n")
+        	srvRecord(query, proto[0])
+        	srvRecord(query, proto[1])
+        	srvRecord(query, proto[2])
+        	fmt.Printf("\n")
+        	//NS Records
+        	nsRecord(query)
+        	color.Green("\n[+] Done\n")
 
 	} else {
 		color.Red("[-] ERROR: Not a valid argument\n")
