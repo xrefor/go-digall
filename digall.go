@@ -112,7 +112,7 @@ func main() {
         	//TXT Records
         	color.Cyan("\n[+] TXT Record(s)\n")
         	txtRecord(query)
-        	//SRV Records using slice proto to check protocoll tcp and tls
+        	//SRV Records using slice proto to check protocoll tcp, udp and tls
         	color.Cyan("\n[+] SRV Record(s)\n")
         	srvRecord(query, proto[0])
         	srvRecord(query, proto[1])
