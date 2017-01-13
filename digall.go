@@ -124,6 +124,6 @@ func main() {
 
 	} else {
 		color.Red("[-] ERROR: Not a valid argument\n")
-		color.Yellow("[!] Usage: ./digall <domain>\n[!] QUITTING")
+		color.Yellow("[!] Usage: ./digall <hostname>\n[!] QUITTING")
 	}
 }
