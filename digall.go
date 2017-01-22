@@ -9,6 +9,57 @@ import (
 	"os"
 )
 
+func main() {
+	if len(os.Args) > 1 {
+		//Query argument parsed and encoded to ASCII
+		//in case of foreign letters(e.g æøå) usage: (digall <hostname>)
+		u, err := url.Parse("http://" + os.Args[1])
+		if err != nil {
+			fmt.Println(err)
+		}
+		query, err := idna.ToASCII(u.Host)
+		if err != nil {
+			fmt.Println(err)
+		}
+		// variable for A record subdomain
+		www := "www."
+		//Used to check protocoll of SRV Record (See below)
+		proto := [3]string{"tcp", "tls", "udp"}
+
+		//Run query functions and print info
+		//----------------------------------
+		//A Records
+		color.Yellow("\n[+] Starting DNS queries\n")
+		color.Cyan("[+] A Records\n")
+		color.Magenta("[*] " + query)
+		aRecord(query)
+		color.Magenta("\n[*] www." + query)
+		aRecord(www + query)
+		//CNAME Records
+		color.Cyan("\n[+] CNAME Record(www." + query + ")")
+		cnameRecord(www + query)
+		//MX Records
+		color.Cyan("[+] MX Records\n")
+		mxRecord(query)
+		//TXT Records
+		color.Cyan("\n[+] TXT Record(s)\n")
+		txtRecord(query)
+		//SRV Records using slice proto to check protocoll tcp, udp and tls
+		color.Cyan("\n[+] SRV Record(s)\n")
+		srvRecord(query, proto[0])
+		srvRecord(query, proto[1])
+		srvRecord(query, proto[2])
+		fmt.Printf("\n")
+		//NS Records
+		nsRecord(query)
+		color.Green("\n[+] Done\n")
+
+	} else {
+		color.Red("[-] ERROR: Not a valid argument\n")
+		color.Yellow("[!] Usage: ./digall <hostname>\n[!] QUITTING")
+	}
+}
+
 //Lookup functions
 func aRecord(query string) {
 	ipRecord, err := net.LookupIP(query)
@@ -74,56 +125,5 @@ func nsRecord(query string) {
 	}
 	if err != nil {
 		//panic(err)
-	}
-}
-
-func main() {
-	if len(os.Args) > 1 {
-		//Query argument parsed and encoded to ASCII
-		//in case of foreign letters(e.g æøå) usage: (digall <hostname>)
-		u, err := url.Parse("http://" + os.Args[1])
-		if err != nil {
-			fmt.Println(err)
-		}
-		query, err := idna.ToASCII(u.Host)
-		if err != nil {
-			fmt.Println(err)
-		}
-		// variable for A record subdomain
-		www := "www."
-		//Used to check protocoll of SRV Record (See below)
-		proto := [3]string{"tcp", "tls", "udp"}
-
-		//Run query functions and print info
-		//----------------------------------
-		//A Records
-        	color.Yellow("\n[+] Starting DNS queries\n")
-        	color.Cyan("[+] A Records\n")
-        	color.Magenta("[*] "+query)
-        	aRecord(query)
-        	color.Magenta("\n[*] www."+query)
-        	aRecord(www+query)
-        	//CNAME Records
-        	color.Cyan("\n[+] CNAME Record(www."+query+")")
-        	cnameRecord(www+query)
-        	//MX Records
-        	color.Cyan("[+] MX Records\n")
-        	mxRecord(query)
-        	//TXT Records
-        	color.Cyan("\n[+] TXT Record(s)\n")
-        	txtRecord(query)
-        	//SRV Records using slice proto to check protocoll tcp, udp and tls
-        	color.Cyan("\n[+] SRV Record(s)\n")
-        	srvRecord(query, proto[0])
-        	srvRecord(query, proto[1])
-        	srvRecord(query, proto[2])
-        	fmt.Printf("\n")
-        	//NS Records
-        	nsRecord(query)
-        	color.Green("\n[+] Done\n")
-
-	} else {
-		color.Red("[-] ERROR: Not a valid argument\n")
-		color.Yellow("[!] Usage: ./digall <hostname>\n[!] QUITTING")
 	}
 }
