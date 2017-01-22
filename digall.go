@@ -112,7 +112,7 @@ func srvRecord(query, proto string) {
 			color.Cyan("cname : %s \n", cname)
 		}
 		if err != nil {
-			//panic(err)
+			break
 		}
 	}
 }
