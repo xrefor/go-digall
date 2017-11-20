@@ -2,7 +2,10 @@
 
 My first golang project learning Golang. Does domain lookup of A, MX, CNAME, TXT, SRV and NS records, all in one go.
 
-example usage: digall github.com
+example usage:
+`
+digall github.com
+
 [+] Starting DNS queries
 [+] A Records
 [*] github.com
@@ -37,4 +40,7 @@ NS : ns4.p16.dynect.net.
 NS : ns-421.awsdns-52.com. 
 NS : ns-1283.awsdns-32.org. 
 NS : ns3.p16.dynect.net.
+`
+
+
 
