@@ -29,17 +29,17 @@ func main() {
 		//Run query functions and print info
 		//----------------------------------
 		//A Records
-		color.Yellow("\n[+] Starting DNS queries\n")
+		color.Yellow("[+] Starting DNS queries\n")
 		color.Cyan("[+] A Records\n")
 		color.Magenta("[*] " + query)
 		aRecord(query)
-		color.Magenta("\n[*] www." + query)
+		color.Magenta("[*] www." + query)
 		aRecord(www + query)
 		//CNAME Records
 		color.Cyan("\n[+] CNAME Record(www." + query + ")")
 		cnameRecord(www + query)
 		//MX Records
-		color.Cyan("[+] MX Records\n")
+		color.Cyan("\n[+] MX Records\n")
 		mxRecord(query)
 		//TXT Records
 		color.Cyan("\n[+] TXT Record(s)\n")
@@ -52,7 +52,7 @@ func main() {
 		fmt.Printf("\n")
 		//NS Records
 		nsRecord(query)
-		color.Green("\n[+] Done\n")
+		color.Green("[+] Done\n")
 
 	} else {
 		color.Red("[-] ERROR: Not a valid argument\n")
