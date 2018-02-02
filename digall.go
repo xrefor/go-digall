@@ -31,6 +31,7 @@ func main() {
 		//A Records
 		color.Yellow("[+] Starting DNS queries\n")
 		color.Cyan("[+] A Records\n")
+		color.Yellow("WASDASFSAFAF")
 		color.Magenta("[*] " + query)
 		aRecord(query)
 		color.Magenta("[*] www." + query)
